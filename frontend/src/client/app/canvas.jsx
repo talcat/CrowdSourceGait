@@ -6,11 +6,11 @@ class Canvas extends React.Component {
   constructor(props) {
       super(props);
       this.state = {sx: 0, sy: 0,
-      		 timeOffset: 0,
-      		 sw: this.props.width,
-		 hw: this.props.height};
+      		   timeOffset: 0,
+      		   sw: this.props.width,
+		         hw: this.props.height};
   }
-  
+
   zoom (evt) {
     this.setState(function(state, props) {
          return {sx: state.sx, sy: state.sy, sw: state.sw/2, hw: state.hw/2, timeOffset: state.timeOffset};
@@ -23,7 +23,7 @@ class Canvas extends React.Component {
     if (!(screenX == 0 && screenY == 0)) {
     this.setState(function(state, props) {
          var xDelta = this.state.lastDragX - screenX;
-         var yDelta = this.state.lastDragY - screenY;    
+         var yDelta = this.state.lastDragY - screenY;
          var newSX = Math.min(props.width - state.sw, Math.max(0,state.sx+xDelta));
          var newSY = Math.min(props.height - state.hw, Math.max(0,state.sy+yDelta));
 
@@ -45,19 +45,12 @@ dragStart(evt) {
    dragIcon.width = 0;
    evt.persist();
    var screenX = evt.screenX;
-   var screenY = evt.screenY;   
+   var screenY = evt.screenY;
    evt.dataTransfer.setDragImage(dragIcon, 0, 0);
     this.setState(function(state, props) {
          return {sx: state.sx, sy: state.sy, sw: state.sw, hw: state.hw, lastDragX: screenX, lastDragY: screenY, timeOffset: state.timeOffset};
-    });   
- }
-
-  advanceFrame() {
-    this.setState(function(state, props) {
-      return {sx: state.sx, sy: state.sy, sw: state.sw, hw: state.hw, lastDragX: state.lastDragX, lastDragY: state.lastDragY, timeOffset: state.timeOffset + 1.0/30.0};
     });
-  }
-
+ }
   render () {
     return <div>
       <ImageZoomCanvas
@@ -72,12 +65,10 @@ dragStart(evt) {
 	hw={this.state.hw}
 	width={this.props.width}
 	height={this.props.height}
-	videoUrl="http://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4"
-	imgUrl={"https://upload.wikimedia.org/wikipedia/en/2/24/Lenna.png"} />
-	<button type="button" onClick={this.advanceFrame.bind(this)}> Next </button>
+	imgUrl={this.props.imgUrl} />
     </div>;
   }
-  
+
 }
 
 module.exports = Canvas;
