@@ -11,6 +11,10 @@ def getImage(seq_num, vid_num, frame_num):
     frames.sort()
     return send_file(frames[frame_num], mimetype='image/png')
 
+@app.route("/")
+def hack():
+    return send_file('../frontend/src/client/index.html')
+
 @app.route('/<path:filename>')
 def index(filename):
     return send_from_directory('../frontend/src/client/',

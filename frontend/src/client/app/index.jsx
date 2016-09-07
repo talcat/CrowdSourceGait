@@ -25,8 +25,6 @@ class App extends React.Component {
         vidNum: this.getParameterByName("vidNum") || 1}
   }
 
-
-
   updateImgUrl(url) {
     // change frames
     if(this.refs.labels) {
