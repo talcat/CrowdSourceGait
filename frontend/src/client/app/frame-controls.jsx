@@ -21,6 +21,7 @@ class FrameControls extends React.Component {
       // dont go to negative frames
       return;
     }
+
     this.setState(function(prevState, props) {
       var newState = {frameNumber: prevState.frameNumber + offset}
       this.props.imgUpdate(this.getFrameUrl(newState));
@@ -29,14 +30,12 @@ class FrameControls extends React.Component {
   }
 
   getFrameUrl(state) {
-    return "/getImages/" + this.props.filename + "/" + state.frameNumber;
+    return "/getImages/" + this.props.seqNum + "/" + this.props.vidNum + "/"+ state.frameNumber;
   }
 
   componentDidMount() {
     this.props.imgUpdate(this.getFrameUrl(this.state));
     window.addEventListener('keyup', function(evt) {
-      console.log(evt);
-      console.log(evt.charCode | evt.keyCode);
       if (evt.charCode | evt.keyCode == 37) {
         this.prevFrame();
       } else if (evt.charCode | evt.keyCode == 39)
