@@ -7,6 +7,7 @@ class Canvas extends React.Component {
       super(props);
       this.state = {sx: 0, sy: 0,
       		   timeOffset: 0,
+             contrast: 0,
       		   sw: this.props.width,
 		         hw: this.props.height};
   }
@@ -27,16 +28,22 @@ class Canvas extends React.Component {
          var newSX = Math.min(props.width - state.sw, Math.max(0,state.sx+xDelta));
          var newSY = Math.min(props.height - state.hw, Math.max(0,state.sy+yDelta));
 
-         return {sx: newSX,
+         return Object.assign({},state,{sx: newSX,
 	 	 sy: newSY,
-		 timeOffset: state.timeOffset,
-		 sw: state.sw,
-		 hw: state.hw,
 		 lastDragX: screenX,
-		 lastDragY: screenY};
+		 lastDragY: screenY});
     });
     }
   }
+
+setContrast(evt) {
+  var value = evt.target.value;
+  console.log(evt.target);
+  console.log(value);
+  this.setState(function(state, props) {
+    return Object.assign({}, state, {contrast: value});
+  });
+}
 
 dragStart(evt) {
    var dragIcon = document.createElement('img');
@@ -48,7 +55,7 @@ dragStart(evt) {
    var screenY = evt.screenY;
    evt.dataTransfer.setDragImage(dragIcon, 0, 0);
     this.setState(function(state, props) {
-         return {sx: state.sx, sy: state.sy, sw: state.sw, hw: state.hw, lastDragX: screenX, lastDragY: screenY, timeOffset: state.timeOffset};
+        return Object.assign({},state,{lastDragX: screenX, lastDragY: screenY});
     });
  }
   render () {
@@ -63,9 +70,11 @@ dragStart(evt) {
 	sy={this.state.sy}
 	sw={this.state.sw}
 	hw={this.state.hw}
+  contrast={this.state.contrast}
 	width={this.props.width}
 	height={this.props.height}
 	imgUrl={this.props.imgUrl} />
+<input type="range" min={-100} max={100} step={1} onChange={this.setContrast.bind(this)}/>
     </div>;
   }
 

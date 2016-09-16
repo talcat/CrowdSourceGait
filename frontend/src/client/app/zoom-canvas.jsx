@@ -7,9 +7,34 @@ class ImageZoomCanvas extends React.Component {
       super(props);
   }
 
+ contrastImage(imgData, contrast){  //input range [-100..100]
+      var d = imgData.data;
+      contrast = (contrast/100) + 1;  //convert to decimal & shift range: [0..2]
+      var intercept = 128 * (1 - contrast);
+      for(var i=0;i<d.length;i+=4){   //r,g,b,a
+          d[i] = d[i] * contrast + intercept;
+          d[i+1] = d[i+1] * contrast + intercept;
+          d[i+2] = d[i+2] * contrast + intercept;
+      }
+      return imgData;
+  }
+
+
   initCanvas() {
+    var canvas = document.createElement('canvas');
+    var virtualContext = canvas.getContext('2d');
+    canvas.width = this.refs.img.width;
+    canvas.height = this.refs.img.height;
+    virtualContext.drawImage(this.refs.img, 0, 0 );
+    var virtualData = virtualContext.getImageData(0, 0, this.refs.img.width, this.refs.img.height);
+    var contrastedImg = this.contrastImage(virtualData, this.props.contrast);
+    virtualContext.fillStyle = "rgb(255,255,255)";
+    virtualContext.fillRect(0,0,this.refs.img.width, this.refs.img.height);
+    virtualContext.putImageData(contrastedImg,0,0);
+
     var ctx = this.refs.canvas.getContext("2d");
-    ctx.drawImage(this.refs.img,
+    console.log(contrastedImg);
+    ctx.drawImage(canvas,
 		  this.props.sx,
 		  this.props.sy,
 		  this.props.sw,
@@ -18,6 +43,7 @@ class ImageZoomCanvas extends React.Component {
 		  0,
 		  this.props.width,
 		  this.props.height);
+
   }
 
   render () {

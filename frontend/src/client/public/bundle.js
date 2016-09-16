@@ -61,11 +61,11 @@
 	
 	var _canvas2 = _interopRequireDefault(_canvas);
 	
-	var _frameControls = __webpack_require__(/*! ./frame-controls.jsx */ 178);
+	var _frameControls = __webpack_require__(/*! ./frame-controls.jsx */ 173);
 	
 	var _frameControls2 = _interopRequireDefault(_frameControls);
 	
-	var _LabelControls = __webpack_require__(/*! ./LabelControls.jsx */ 179);
+	var _LabelControls = __webpack_require__(/*! ./LabelControls.jsx */ 174);
 	
 	var _LabelControls2 = _interopRequireDefault(_LabelControls);
 	
@@ -22033,7 +22033,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _zoomCanvas = __webpack_require__(/*! ./zoom-canvas.jsx */ 173);
+	var _zoomCanvas = __webpack_require__(/*! ./zoom-canvas.jsx */ 175);
 	
 	var _zoomCanvas2 = _interopRequireDefault(_zoomCanvas);
 	
@@ -22045,7 +22045,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	__webpack_require__(/*! ./canvas.css */ 174);
+	__webpack_require__(/*! ./canvas.css */ 176);
 	
 	var Canvas = function (_React$Component) {
 	  _inherits(Canvas, _React$Component);
@@ -22057,6 +22057,7 @@
 	
 	    _this.state = { sx: 0, sy: 0,
 	      timeOffset: 0,
+	      contrast: 0,
 	      sw: _this.props.width,
 	      hw: _this.props.height };
 	    return _this;
@@ -22081,15 +22082,22 @@
 	          var newSX = Math.min(props.width - state.sw, Math.max(0, state.sx + xDelta));
 	          var newSY = Math.min(props.height - state.hw, Math.max(0, state.sy + yDelta));
 	
-	          return { sx: newSX,
+	          return Object.assign({}, state, { sx: newSX,
 	            sy: newSY,
-	            timeOffset: state.timeOffset,
-	            sw: state.sw,
-	            hw: state.hw,
 	            lastDragX: screenX,
-	            lastDragY: screenY };
+	            lastDragY: screenY });
 	        });
 	      }
+	    }
+	  }, {
+	    key: 'setContrast',
+	    value: function setContrast(evt) {
+	      var value = evt.target.value;
+	      console.log(evt.target);
+	      console.log(value);
+	      this.setState(function (state, props) {
+	        return Object.assign({}, state, { contrast: value });
+	      });
 	    }
 	  }, {
 	    key: 'dragStart',
@@ -22103,7 +22111,7 @@
 	      var screenY = evt.screenY;
 	      evt.dataTransfer.setDragImage(dragIcon, 0, 0);
 	      this.setState(function (state, props) {
-	        return { sx: state.sx, sy: state.sy, sw: state.sw, hw: state.hw, lastDragX: screenX, lastDragY: screenY, timeOffset: state.timeOffset };
+	        return Object.assign({}, state, { lastDragX: screenX, lastDragY: screenY });
 	      });
 	    }
 	  }, {
@@ -22122,9 +22130,11 @@
 	          sy: this.state.sy,
 	          sw: this.state.sw,
 	          hw: this.state.hw,
+	          contrast: this.state.contrast,
 	          width: this.props.width,
 	          height: this.props.height,
-	          imgUrl: this.props.imgUrl })
+	          imgUrl: this.props.imgUrl }),
+	        _react2.default.createElement('input', { type: 'range', min: -100, max: 100, step: 1, onChange: this.setContrast.bind(this) })
 	      );
 	    }
 	  }]);
@@ -22136,6 +22146,196 @@
 
 /***/ },
 /* 173 */
+/*!*******************************************!*\
+  !*** ./src/client/app/frame-controls.jsx ***!
+  \*******************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var FrameControls = function (_React$Component) {
+	  _inherits(FrameControls, _React$Component);
+	
+	  function FrameControls(props) {
+	    _classCallCheck(this, FrameControls);
+	
+	    var _this = _possibleConstructorReturn(this, (FrameControls.__proto__ || Object.getPrototypeOf(FrameControls)).call(this, props));
+	
+	    _this.state = { frameNumber: 0 };
+	    return _this;
+	  }
+	
+	  _createClass(FrameControls, [{
+	    key: "nextFrame",
+	    value: function nextFrame() {
+	      this.changeFrame(1);
+	    }
+	  }, {
+	    key: "prevFrame",
+	    value: function prevFrame() {
+	      this.changeFrame(-1);
+	    }
+	  }, {
+	    key: "changeFrame",
+	    value: function changeFrame(offset) {
+	      if (this.state.frameNumber + offset < 0) {
+	        // dont go to negative frames
+	        return;
+	      }
+	
+	      this.setState(function (prevState, props) {
+	        var newState = { frameNumber: prevState.frameNumber + offset };
+	        this.props.imgUpdate(this.getFrameUrl(newState));
+	        return newState;
+	      });
+	    }
+	  }, {
+	    key: "getFrameUrl",
+	    value: function getFrameUrl(state) {
+	      return "/getImages/" + this.props.seqNum + "/" + this.props.vidNum + "/" + state.frameNumber;
+	    }
+	  }, {
+	    key: "componentDidMount",
+	    value: function componentDidMount() {
+	      this.props.imgUpdate(this.getFrameUrl(this.state));
+	      window.addEventListener('keyup', function (evt) {
+	        if (evt.charCode | evt.keyCode == 37) {
+	          this.prevFrame();
+	        } else if (evt.charCode | evt.keyCode == 39) this.nextFrame();
+	      }.bind(this));
+	    }
+	  }, {
+	    key: "render",
+	    value: function render() {
+	      return _react2.default.createElement(
+	        "div",
+	        null,
+	        _react2.default.createElement(
+	          "button",
+	          { type: "button", onClick: this.prevFrame.bind(this) },
+	          " Prev "
+	        ),
+	        _react2.default.createElement(
+	          "button",
+	          { type: "button", onClick: this.nextFrame.bind(this) },
+	          " Next "
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return FrameControls;
+	}(_react2.default.Component);
+	
+	module.exports = FrameControls;
+
+/***/ },
+/* 174 */
+/*!******************************************!*\
+  !*** ./src/client/app/LabelControls.jsx ***!
+  \******************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var LabelControls = function (_React$Component) {
+	  _inherits(LabelControls, _React$Component);
+	
+	  function LabelControls(props) {
+	    _classCallCheck(this, LabelControls);
+	
+	    var _this = _possibleConstructorReturn(this, (LabelControls.__proto__ || Object.getPrototypeOf(LabelControls)).call(this, props));
+	
+	    _this.state = {};
+	    for (var i = 0; i < props.labels.length; i += 1) {
+	      _this.state[props.labels[i]] = false;
+	    }
+	    return _this;
+	  }
+	
+	  _createClass(LabelControls, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      window.addEventListener('keyup', function (evt) {
+	        var keyCode = evt.charCode | evt.keyCode;
+	        if (keyCode >= 49 && keyCode < 49 + this.props.labels.length) {
+	          var digitKey = keyCode -= 49;
+	          var flipLabelName = this.props.labels[digitKey];
+	          this.setState(function (prevState, props) {
+	            var flippedVal = {};
+	            flippedVal[flipLabelName] = Boolean(1 ^ prevState[flipLabelName]);
+	            return Object.assign({}, prevState, flippedVal);
+	          }.bind(this));
+	        }
+	      }.bind(this));
+	    }
+	  }, {
+	    key: 'flipLabel',
+	    value: function flipLabel(label) {
+	      this.setState(function (prevState, props) {
+	        var flippedVal = {};
+	        flippedVal[label] = Boolean(1 ^ prevState[label]);
+	        return Object.assign({}, prevState, flippedVal);
+	      }.bind(this));
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        this.props.labels.map(function (label) {
+	          return _react2.default.createElement(
+	            'label',
+	            { key: label },
+	            _react2.default.createElement('input', { type: 'checkbox',
+	              name: '{label}',
+	              onClick: function () {
+	                this.flipLabel(label);
+	              }.bind(this),
+	              checked: this.state[label] }),
+	            label
+	          );
+	        }.bind(this))
+	      );
+	    }
+	  }]);
+	
+	  return LabelControls;
+	}(_react2.default.Component);
+	
+	module.exports = LabelControls;
+
+/***/ },
+/* 175 */
 /*!****************************************!*\
   !*** ./src/client/app/zoom-canvas.jsx ***!
   \****************************************/
@@ -22157,57 +22357,84 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	__webpack_require__(/*! ./canvas.css */ 174);
+	__webpack_require__(/*! ./canvas.css */ 176);
 	
 	var ImageZoomCanvas = function (_React$Component) {
-		_inherits(ImageZoomCanvas, _React$Component);
+	  _inherits(ImageZoomCanvas, _React$Component);
 	
-		function ImageZoomCanvas(props) {
-			_classCallCheck(this, ImageZoomCanvas);
+	  function ImageZoomCanvas(props) {
+	    _classCallCheck(this, ImageZoomCanvas);
 	
-			return _possibleConstructorReturn(this, (ImageZoomCanvas.__proto__ || Object.getPrototypeOf(ImageZoomCanvas)).call(this, props));
-		}
+	    return _possibleConstructorReturn(this, (ImageZoomCanvas.__proto__ || Object.getPrototypeOf(ImageZoomCanvas)).call(this, props));
+	  }
 	
-		_createClass(ImageZoomCanvas, [{
-			key: 'initCanvas',
-			value: function initCanvas() {
-				var ctx = this.refs.canvas.getContext("2d");
-				ctx.drawImage(this.refs.img, this.props.sx, this.props.sy, this.props.sw, this.props.hw, 0, 0, this.props.width, this.props.height);
-			}
-		}, {
-			key: 'render',
-			value: function render() {
-				return _react2.default.createElement(
-					'div',
-					null,
-					_react2.default.createElement('canvas', { id: 'display', width: this.props.width, height: this.props.height, ref: 'canvas',
-						draggable: true,
-						onDoubleClick: this.props.zoom,
-						onDragStart: this.props.dragStart,
-						onDragEnd: this.props.dragStop,
-						onDrag: this.props.drag }),
-					_react2.default.createElement('img', { className: 'load',
-						width: this.props.width,
-						height: this.props.height,
-						src: this.props.imgUrl,
-						ref: 'img',
-						onLoad: this.initCanvas.bind(this) })
-				);
-			}
-		}, {
-			key: 'componentDidUpdate',
-			value: function componentDidUpdate() {
-				this.initCanvas();
-			}
-		}]);
+	  _createClass(ImageZoomCanvas, [{
+	    key: 'contrastImage',
+	    value: function contrastImage(imgData, contrast) {
+	      //input range [-100..100]
+	      var d = imgData.data;
+	      contrast = contrast / 100 + 1; //convert to decimal & shift range: [0..2]
+	      var intercept = 128 * (1 - contrast);
+	      for (var i = 0; i < d.length; i += 4) {
+	        //r,g,b,a
+	        d[i] = d[i] * contrast + intercept;
+	        d[i + 1] = d[i + 1] * contrast + intercept;
+	        d[i + 2] = d[i + 2] * contrast + intercept;
+	      }
+	      return imgData;
+	    }
+	  }, {
+	    key: 'initCanvas',
+	    value: function initCanvas() {
+	      var canvas = document.createElement('canvas');
+	      var virtualContext = canvas.getContext('2d');
+	      canvas.width = this.refs.img.width;
+	      canvas.height = this.refs.img.height;
+	      virtualContext.drawImage(this.refs.img, 0, 0);
+	      var virtualData = virtualContext.getImageData(0, 0, this.refs.img.width, this.refs.img.height);
+	      var contrastedImg = this.contrastImage(virtualData, this.props.contrast);
+	      virtualContext.fillStyle = "rgb(255,255,255)";
+	      virtualContext.fillRect(0, 0, this.refs.img.width, this.refs.img.height);
+	      virtualContext.putImageData(contrastedImg, 0, 0);
 	
-		return ImageZoomCanvas;
+	      var ctx = this.refs.canvas.getContext("2d");
+	      console.log(contrastedImg);
+	      ctx.drawImage(canvas, this.props.sx, this.props.sy, this.props.sw, this.props.hw, 0, 0, this.props.width, this.props.height);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement('canvas', { id: 'display', width: this.props.width, height: this.props.height, ref: 'canvas',
+	          draggable: true,
+	          onDoubleClick: this.props.zoom,
+	          onDragStart: this.props.dragStart,
+	          onDragEnd: this.props.dragStop,
+	          onDrag: this.props.drag }),
+	        _react2.default.createElement('img', { className: 'load',
+	          width: this.props.width,
+	          height: this.props.height,
+	          src: this.props.imgUrl,
+	          ref: 'img',
+	          onLoad: this.initCanvas.bind(this) })
+	      );
+	    }
+	  }, {
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate() {
+	      this.initCanvas();
+	    }
+	  }]);
+	
+	  return ImageZoomCanvas;
 	}(_react2.default.Component);
 	
 	module.exports = ImageZoomCanvas;
 
 /***/ },
-/* 174 */
+/* 176 */
 /*!***********************************!*\
   !*** ./src/client/app/canvas.css ***!
   \***********************************/
@@ -22216,10 +22443,10 @@
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../../../~/css-loader!./canvas.css */ 175);
+	var content = __webpack_require__(/*! !./../../../~/css-loader!./canvas.css */ 177);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(/*! ./../../../~/style-loader/addStyles.js */ 177)(content, {});
+	var update = __webpack_require__(/*! ./../../../~/style-loader/addStyles.js */ 179)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -22236,13 +22463,13 @@
 	}
 
 /***/ },
-/* 175 */
+/* 177 */
 /*!**************************************************!*\
   !*** ./~/css-loader!./src/client/app/canvas.css ***!
   \**************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(/*! ./../../../~/css-loader/lib/css-base.js */ 176)();
+	exports = module.exports = __webpack_require__(/*! ./../../../~/css-loader/lib/css-base.js */ 178)();
 	// imports
 	
 	
@@ -22253,7 +22480,7 @@
 
 
 /***/ },
-/* 176 */
+/* 178 */
 /*!**************************************!*\
   !*** ./~/css-loader/lib/css-base.js ***!
   \**************************************/
@@ -22312,7 +22539,7 @@
 
 
 /***/ },
-/* 177 */
+/* 179 */
 /*!*************************************!*\
   !*** ./~/style-loader/addStyles.js ***!
   \*************************************/
@@ -22565,196 +22792,6 @@
 			URL.revokeObjectURL(oldSrc);
 	}
 
-
-/***/ },
-/* 178 */
-/*!*******************************************!*\
-  !*** ./src/client/app/frame-controls.jsx ***!
-  \*******************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var FrameControls = function (_React$Component) {
-	  _inherits(FrameControls, _React$Component);
-	
-	  function FrameControls(props) {
-	    _classCallCheck(this, FrameControls);
-	
-	    var _this = _possibleConstructorReturn(this, (FrameControls.__proto__ || Object.getPrototypeOf(FrameControls)).call(this, props));
-	
-	    _this.state = { frameNumber: 0 };
-	    return _this;
-	  }
-	
-	  _createClass(FrameControls, [{
-	    key: "nextFrame",
-	    value: function nextFrame() {
-	      this.changeFrame(1);
-	    }
-	  }, {
-	    key: "prevFrame",
-	    value: function prevFrame() {
-	      this.changeFrame(-1);
-	    }
-	  }, {
-	    key: "changeFrame",
-	    value: function changeFrame(offset) {
-	      if (this.state.frameNumber + offset < 0) {
-	        // dont go to negative frames
-	        return;
-	      }
-	
-	      this.setState(function (prevState, props) {
-	        var newState = { frameNumber: prevState.frameNumber + offset };
-	        this.props.imgUpdate(this.getFrameUrl(newState));
-	        return newState;
-	      });
-	    }
-	  }, {
-	    key: "getFrameUrl",
-	    value: function getFrameUrl(state) {
-	      return "/getImages/" + this.props.seqNum + "/" + this.props.vidNum + "/" + state.frameNumber;
-	    }
-	  }, {
-	    key: "componentDidMount",
-	    value: function componentDidMount() {
-	      this.props.imgUpdate(this.getFrameUrl(this.state));
-	      window.addEventListener('keyup', function (evt) {
-	        if (evt.charCode | evt.keyCode == 37) {
-	          this.prevFrame();
-	        } else if (evt.charCode | evt.keyCode == 39) this.nextFrame();
-	      }.bind(this));
-	    }
-	  }, {
-	    key: "render",
-	    value: function render() {
-	      return _react2.default.createElement(
-	        "div",
-	        null,
-	        _react2.default.createElement(
-	          "button",
-	          { type: "button", onClick: this.prevFrame.bind(this) },
-	          " Prev "
-	        ),
-	        _react2.default.createElement(
-	          "button",
-	          { type: "button", onClick: this.nextFrame.bind(this) },
-	          " Next "
-	        )
-	      );
-	    }
-	  }]);
-	
-	  return FrameControls;
-	}(_react2.default.Component);
-	
-	module.exports = FrameControls;
-
-/***/ },
-/* 179 */
-/*!******************************************!*\
-  !*** ./src/client/app/LabelControls.jsx ***!
-  \******************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var LabelControls = function (_React$Component) {
-	  _inherits(LabelControls, _React$Component);
-	
-	  function LabelControls(props) {
-	    _classCallCheck(this, LabelControls);
-	
-	    var _this = _possibleConstructorReturn(this, (LabelControls.__proto__ || Object.getPrototypeOf(LabelControls)).call(this, props));
-	
-	    _this.state = {};
-	    for (var i = 0; i < props.labels.length; i += 1) {
-	      _this.state[props.labels[i]] = false;
-	    }
-	    return _this;
-	  }
-	
-	  _createClass(LabelControls, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      window.addEventListener('keyup', function (evt) {
-	        var keyCode = evt.charCode | evt.keyCode;
-	        if (keyCode >= 49 && keyCode < 49 + this.props.labels.length) {
-	          var digitKey = keyCode -= 49;
-	          var flipLabelName = this.props.labels[digitKey];
-	          this.setState(function (prevState, props) {
-	            var flippedVal = {};
-	            flippedVal[flipLabelName] = Boolean(1 ^ prevState[flipLabelName]);
-	            return Object.assign({}, prevState, flippedVal);
-	          }.bind(this));
-	        }
-	      }.bind(this));
-	    }
-	  }, {
-	    key: 'flipLabel',
-	    value: function flipLabel(label) {
-	      this.setState(function (prevState, props) {
-	        var flippedVal = {};
-	        flippedVal[label] = Boolean(1 ^ prevState[label]);
-	        return Object.assign({}, prevState, flippedVal);
-	      }.bind(this));
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        this.props.labels.map(function (label) {
-	          return _react2.default.createElement(
-	            'label',
-	            { key: label },
-	            _react2.default.createElement('input', { type: 'checkbox',
-	              name: '{label}',
-	              onClick: function () {
-	                this.flipLabel(label);
-	              }.bind(this),
-	              checked: this.state[label] }),
-	            label
-	          );
-	        }.bind(this))
-	      );
-	    }
-	  }]);
-	
-	  return LabelControls;
-	}(_react2.default.Component);
-	
-	module.exports = LabelControls;
 
 /***/ }
 /******/ ]);
