@@ -17,10 +17,15 @@ class App extends React.Component {
       return decodeURIComponent(results[2].replace(/\+/g, " "));
   }
 
+  componentDidMount() {
+    this.refs.controls.changeFrame(0);
+  }
+
   constructor(props) {
       super(props);
 
       this.state = {imgUrl: "",
+        frameNumber: 0,
         seqNum: this.getParameterByName("seqNum") || 1,
         vidNum: this.getParameterByName("vidNum") || 1}
   }
@@ -34,15 +39,22 @@ class App extends React.Component {
           body: JSON.stringify(this.refs.labels.state)
         }
       );
+      this.refs.labels.changeFrame();
     }
-    this.setState(Object.assign({},this.state,{imgUrl: url}));
+
+    var frameNumber = this.state.frameNumber;
+    if (this.refs.controls != null) {
+      frameNumber = this.refs.controls.state.frameNumber;
+    }
+
+    this.setState(Object.assign({}, this.state, {imgUrl: url, frameNumber: frameNumber}));
   }
 
   render () {
      return <div>
        <Canvas width={1280} height={720} imgUrl={this.state.imgUrl}/>
        <FrameControls seqNum={this.state.seqNum} vidNum = {this.state.vidNum} ref="controls" imgUpdate={this.updateImgUrl.bind(this)}/>
-       <LabelControls ref="labels" labels={["foo","bar"]}/>
+       <LabelControls ref="labels" labels={["foo","bar"]} seqNum={this.state.seqNum} vidNum = {this.state.vidNum}   frameNumber={this.state.frameNumber}/>
        </div>;
   }
 }

@@ -26,6 +26,20 @@ class LabelControls extends React.Component {
     }.bind(this));
   }
 
+
+setOldLabelState() {
+  fetch("/getFrameData/" + this.props.seqNum + "/" + this.props.vidNum + "/" + this.props.frameNumber).then(
+    function(resp) {
+      return resp.json();
+    }
+  ).then(function(json) {
+    if (json != null) {
+      // make sure we aren't doing something dumb here
+      this.setState(json);
+    }
+  }.bind(this))
+}
+
   flipLabel(label) {
     this.setState(function(prevState, props) {
       var flippedVal = {};
@@ -34,9 +48,18 @@ class LabelControls extends React.Component {
     }.bind(this));
   }
 
+  changeFrame() {
+    this.setOldLabelState();
+  }
+
   render() {
-    return <div>
+    console.log(this.state);
+    return <div>  <p>{this.props.frameNumber}</p>
+
       {this.props.labels.map(function(label){
+        console.log(label);
+        console.log(this.state[label]);
+
         return <label key={label}>
           <input type="checkbox"
             name="{label}"

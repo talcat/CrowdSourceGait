@@ -23,17 +23,17 @@ class ImageZoomCanvas extends React.Component {
   initCanvas() {
     var canvas = document.createElement('canvas');
     var virtualContext = canvas.getContext('2d');
+
     canvas.width = this.refs.img.width;
     canvas.height = this.refs.img.height;
+
     virtualContext.drawImage(this.refs.img, 0, 0 );
     var virtualData = virtualContext.getImageData(0, 0, this.refs.img.width, this.refs.img.height);
     var contrastedImg = this.contrastImage(virtualData, this.props.contrast);
     virtualContext.fillStyle = "rgb(255,255,255)";
     virtualContext.fillRect(0,0,this.refs.img.width, this.refs.img.height);
     virtualContext.putImageData(contrastedImg,0,0);
-
     var ctx = this.refs.canvas.getContext("2d");
-    console.log(contrastedImg);
     ctx.drawImage(canvas,
 		  this.props.sx,
 		  this.props.sy,
