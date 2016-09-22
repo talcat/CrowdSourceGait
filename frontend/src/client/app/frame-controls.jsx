@@ -34,12 +34,11 @@ class FrameControls extends React.Component {
   }
 
   componentDidMount() {
-    this.props.imgUpdate(this.getFrameUrl(this.state));
     window.addEventListener('keyup', function(evt) {
       if (evt.charCode | evt.keyCode == 37) {
         this.prevFrame();
       } else if (evt.charCode | evt.keyCode == 39)
-      this.nextFrame();
+        this.nextFrame();
     }.bind(this));
   }
 
