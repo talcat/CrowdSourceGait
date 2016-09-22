@@ -1,0 +1,10 @@
+#compiled python
+*.pyc
+
+#the jsx compulation
+/frontend/client/src/public/*
+
+#node
+/frontend/node_modules/*
+/notebooks/*
+
