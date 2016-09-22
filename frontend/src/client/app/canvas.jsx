@@ -74,7 +74,7 @@ dragStart(evt) {
 	width={this.props.width}
 	height={this.props.height}
 	imgUrl={this.props.imgUrl} />
-<input type="range" min={-100} max={100} step={1} onChange={this.setContrast.bind(this)}/>
+<label> Contrast Control <input type="range" min={-100} max={100} step={1} onChange={this.setContrast.bind(this)}/></label>
     </div>;
   }
 

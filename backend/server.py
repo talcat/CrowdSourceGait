@@ -5,6 +5,8 @@ app = Flask(__name__)
 import glob
 import json
 
+#does this work?
+
 @app.route("/getImages/<int:seq_num>/<int:vid_num>/<int:frame_num>")
 def getImage(seq_num, vid_num, frame_num):
     frames = glob.glob("frames/*png")
